@@ -82,12 +82,12 @@ CMD python /app/script.py
 version: '3.7'  
   
 services:  
-	script:  
-		build:  # Собираем приложение используя наш dockerfile.
-			dockerfile: ./deploy/dockerfiles/script.Dockerfile  
- 			context: .  
- 		# Запускаем его с командой для продового запуска.
-		command: python script.py this is prod
+  script:  
+        build:  # Собираем приложение используя наш dockerfile.
+            dockerfile: ./deploy/dockerfiles/script.Dockerfile  
+            context: .  
+        # Запускаем его с командой для продового запуска.
+        command: python script.py this is prod
 ```
 
 Теперь запустим всё это чудо.
@@ -112,12 +112,12 @@ this; is; prod
 
 ```yaml
 ---
-# deploy/docker-compose.dev.yml
+# deploy/docker-compose.yml
 version: '3.7'  
   
 services:  
-	script:  
-		command: python script.py this is dev
+  script:
+    command: python script.py this is dev
 ```
 
 Теперь добавим ещё один файл в нашу команду запуска.
