@@ -1,0 +1,30 @@
+site_name: S3rius' Dev Notes
+repo_name: s3rius/obsidian
+repo_url: https://github.com/s3rius/obsidian
+use_directory_urls: true
+
+edit_uri: ''
+
+theme:
+  name: material
+  features:
+    - search.suggest
+
+plugins:
+  - search
+  - i18n:
+      default_language: ru
+      languages:
+        en: english
+        ru: русский
+
+extra:
+    alternate:
+    - name: 🇷🇺 Русский
+      link: /ru/
+      lang: ru
+
+    - name: 🇬🇧 English
+      link: /en/
+      lang: en
+
