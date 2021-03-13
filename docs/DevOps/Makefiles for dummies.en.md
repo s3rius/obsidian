@@ -1,12 +1,13 @@
 # Makefiles for dummies
-Если описывать в двух словах, то это просто описание команд для упрощения работы с проектом. Изначально делались для того, чтобы удобно компилировать всякие проекты на любых языках.
+If we want to describe Makefiles in a nutshell, than we might say it's thing for describing command to ease interaction with the project.
 
-# How it works
-Достаточно просто.
+Initially Makefiles were created to conveniently compile projects written in any language.
 
-Вот пример `Makefile`:
+# How does it work
+It works pretty simple.
 
-```Cmake
+Here's an example of a `Makefile`:
+```Makefile
 # Сгенерируем простой файл
 test.gen:
 	@echo 'echo "Hi!"' > "test.gen"
@@ -17,23 +18,29 @@ run: test.gen
 	sh "test.gen"
 ```
 
-До двоеточий обазначены команды (tagets). Например тут это: `test.gen` и `run`.
-Данные таргеты можно запускать через `make ${target}`. 
+Before colons we define our targets. E.G in this example we have `test.gen` and `run` targets.
 
-Например, если ввести `make run` в папке с `Makefile`, то мы получим следующее:
-```bash
+These targets can be triggered with command like `make ${target}`.
+
+If we enter `make run` in terminal in a dir with `Makefile` we'll get the following:
+```console
 sh "test.gen"  
 Hi!
 ```
 
-Как видно из выхлопа данной команды, у нас успешно запустился файл `test.gen`, хотя мы не запускали команду `make test.gen`. Что произошло? Давайте разбираться.
+As we can see in output, we successfully ran the `run` target which read the `test.gen` file, but we didn't run `make test.gen` target. What happened?
+
+Let's dive into it.
 
 ## Targets dependencies
 
-На строчке объявления таргета `run` видно, что объявлен `test.gen`. Это зависимость данного таргета и она будет вызвана до того, как выполнится скрипт описываемого таргета. Таких зависимостей может быть много, перечисляются они чере пробел.
+On the line where we define our `run` target, we can see the `test.gen`
+target places right after the colon.
+
+Это зависимость данного таргета и она будет вызвана до того, как выполнится скрипт описываемого таргета. Таких зависимостей может быть много, перечисляются они чере пробел.
 
 Например:
-```Cmake
+```Makefile
 .PHONY: target1
 target1:
 	echo "1"
@@ -48,7 +55,8 @@ target3: target1 target2
 ```
 
 При вызове `make target3` будет выведено:
-```bash
+```console
+$ make target3
 echo "1"  
 1  
 echo "2"  
@@ -63,7 +71,7 @@ memes
 
 В предыдущем примере можно заметить, что он написал все команды в терминал. Для того, чтобы этого избежать следует добавить "@" в начало команды и она не будет напечатана.
 
-```Cmake
+```Makefile
 .PHONY: target1
 target1:
 	@echo "1"
@@ -78,7 +86,8 @@ target3: target1 target2
 ```
 
 Теперь при вызое `make target3` будет показано следующее:
-```bash
+```console
+$ make target3
 1
 2
 memes
@@ -91,7 +100,7 @@ memes
 Раскрою секрет, в Makefile это базовый функционал.
 
 Давайте немного поменяем первый Makefile и запустим дважды.
-```Cmake
+```Makefile
 # Сгенерируем простой файл
 test.gen:
 	echo 'echo "Hi!"' > "test.gen"
@@ -106,12 +115,12 @@ run: test.gen
 
 Позапускаем.
 
-```Cmake
-➜ make run  
+```console
+$ make run  
 echo 'echo "Hi!"' > "test.gen"  # Наша командабыла вызвана.
 sh "test.gen"  
 Hi!  
-➜ make run  
+$ make run  
 sh "test.gen"  # Наша команда не вызвана.
 Hi!
 ```

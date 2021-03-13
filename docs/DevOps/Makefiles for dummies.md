@@ -6,7 +6,7 @@
 
 Вот пример `Makefile`:
 
-```Cmake
+```Makefile
 # Сгенерируем простой файл
 test.gen:
 	@echo 'echo "Hi!"' > "test.gen"
@@ -21,8 +21,8 @@ run: test.gen
 Данные таргеты можно запускать через `make ${target}`. 
 
 Например, если ввести `make run` в папке с `Makefile`, то мы получим следующее:
-```bash
-sh "test.gen"  
+```console
+$ sh "test.gen"  
 Hi!
 ```
 
@@ -33,7 +33,7 @@ Hi!
 На строчке объявления таргета `run` видно, что объявлен `test.gen`. Это зависимость данного таргета и она будет вызвана до того, как выполнится скрипт описываемого таргета. Таких зависимостей может быть много, перечисляются они чере пробел.
 
 Например:
-```Cmake
+```Makefile
 .PHONY: target1
 target1:
 	echo "1"
@@ -48,7 +48,8 @@ target3: target1 target2
 ```
 
 При вызове `make target3` будет выведено:
-```bash
+```console
+$ make target3
 echo "1"  
 1  
 echo "2"  
@@ -63,7 +64,7 @@ memes
 
 В предыдущем примере можно заметить, что он написал все команды в терминал. Для того, чтобы этого избежать следует добавить "@" в начало команды и она не будет напечатана.
 
-```Cmake
+```Makefile
 .PHONY: target1
 target1:
 	@echo "1"
@@ -78,7 +79,8 @@ target3: target1 target2
 ```
 
 Теперь при вызое `make target3` будет показано следующее:
-```bash
+```cosole
+$ make target3
 1
 2
 memes
@@ -91,7 +93,7 @@ memes
 Раскрою секрет, в Makefile это базовый функционал.
 
 Давайте немного поменяем первый Makefile и запустим дважды.
-```Cmake
+```Makefile
 # Сгенерируем простой файл
 test.gen:
 	echo 'echo "Hi!"' > "test.gen"
@@ -106,12 +108,12 @@ run: test.gen
 
 Позапускаем.
 
-```Cmake
-➜ make run  
+```console
+$ make run  
 echo 'echo "Hi!"' > "test.gen"  # Наша командабыла вызвана.
 sh "test.gen"  
 Hi!  
-➜ make run  
+$ make run  
 sh "test.gen"  # Наша команда не вызвана.
 Hi!
 ```

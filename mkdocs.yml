@@ -9,10 +9,26 @@ theme:
   name: material
   features:
     - search.suggest
+    - navigation.tabs
+
+markdown_extensions:
+  - fenced_code
+  - codehilite:
+      use_pygments: false
+      linenums: true
+  - termynal
+  - admonition
+  - extra
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+  - markdown_include.include:
+      base_path: docs
 
 plugins:
   - search
-  - i18n:
+  - termynal
+  - translations: # https://github.com/s3rius/mkdocs-translations
       default_language: ru
       languages:
         en: english
@@ -28,3 +44,9 @@ extra:
       link: /en/
       lang: en
 
+extra_css:
+  - css/highlight_style.css
+
+extra_javascript:
+  - js/highlight.min.js
+  - js/startup.js

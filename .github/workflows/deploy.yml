@@ -1,0 +1,39 @@
+name: Publish docs
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.7'
+
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install poetry
+          poetry install --no-dev
+        env:
+          POETRY_VIRTUALENVS_CREATE: false
+
+      - name: Build docs
+        run: mkdocs build
+
+      - name: Push to docs repo
+        uses: cpina/github-action-push-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'site'
+          destination-github-username: 's3rius'
+          destination-repository-name: 's3rius.github.io'
+          user-email: win10@list.ru

@@ -1,17 +1,27 @@
-# Welcome to MkDocs
+# Welcome
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Greetings and welcome to my note book.
 
-## Commands
+Here you can find useful information about tech.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+<div align="left"> 
+  <h3>Contact me</h3>
+</div>
+<div align="left">
+<a href="https://t.me/s3rius_san">
+  <img src="https://raw.githubusercontent.com/s3rius/s3rius/main/images/telegram.png" width=50>
+</a>
+<a href="https://vk.com/kapitan_dominator">
+  <img src="https://raw.githubusercontent.com/s3rius/s3rius/main/images/vk.png" width=50>
+</a>
+<a href="https://join.skype.com/invite/hVFQqTKjhM8V">
+  <img src="https://raw.githubusercontent.com/s3rius/s3rius/main/images/skype.png" width=50>
+</a>
+<a href="mailto:win10@list.ru">
+  <img src="https://raw.githubusercontent.com/s3rius/s3rius/main/images/mail.png" width=50>
+</a>
+<a href="https://gitlab.le-memese.com/s3rius">
+  <img src="https://raw.githubusercontent.com/s3rius/s3rius/main/images/gitlab.png" width=50>
+</a>
+</div>

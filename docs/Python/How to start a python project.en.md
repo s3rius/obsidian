@@ -8,9 +8,10 @@
 
 Для начала создадим проект.
 
-```
-➜ poetry new new_proj
+```console
+$ poetry new new_proj
 Created package new_proj in new_proj
+$ cd new_proj
 ```
 
 Данная команда сгенерирует следующую структуру:
@@ -27,11 +28,11 @@ new_proj
 
 Это наш новый проект с небольшими заготовками. В целом, тут нет ничего необычного. Весь код библиотеки/проекта будет в папке с названием проекта. `README.rst` - дефолтный README. `pyproject.toml` - данные о проекте для упаковщика.
 
-## Что делать с poetry
+## How to deal with poetry
 
 Вся информация есть в оф. документации тулы. Тут я расскажу про основные моменты.
 
-### установка зависимостей
+### Dependency management
 
 Чтобы добавить зависимость проекта достаточно выполнить
 ```bash
@@ -46,7 +47,7 @@ poetry add ${dependency}
 poetry add ${dependency} --dev 
 ```
 
-### Выполнение команд
+### How to run commands
 
 При использовании virtualenv для входа в оболочку всегда надо было вводить
 ```bash
@@ -57,37 +58,52 @@ source venv/bin/activate
 Чтобы выполнить одиночную команду можно вызвать `run`. 
 
 Например:
-```bash
-poetry install black --dev  # установим cli-программу
-poetry run black # запустим её в папке
+```console
+$ poetry install black --dev
+Using version ^20.8b1 for black   
+ • Installing appdirs (1.4.4)  
+ • Installing click (7.1.2)  
+ • Installing mypy-extensions (0.4.3)  
+ • Installing pathspec (0.8.1)  
+ • Installing regex (2020.11.13)  
+ • Installing toml (0.10.2)  
+ • Installing typed-ast (1.4.2)  
+ • Installing typing-extensions (3.7.4.3)  
+ • Installing black (20.8b1)
+$ poetry run black .
+reformatted new_proj/new_proj/__init__.py
+reformatted new_proj/tests/test_new_proj.py
+All done! ✨ 🍰 ✨
+2 files reformatted, 1 file left unchanged.
 ```
 
 Для выполнения нескольких комманд подряд, можно войти в shell. Это аналог `source venv/bin/activate`.
 
-```bash
-poetry shell # зашли в оболочку
-black # вызвали программу установленную в оболочку
+```console
+$ poetry shell
+Spawning shell within /home/s3rius/.cache/pypoetry/virtualenvs/new-proj-eutP4v0O-py3.9
+$ black .
+reformatted new_proj/new_proj/__init__.py
+reformatted new_proj/tests/test_new_proj.py
+All done! ✨ 🍰 ✨
+2 files reformatted, 1 file left unchanged.
 ```
 
-### Версионирование
+### Versioning
 
 Менять версии пакета вручную больше не нужно.
 
 У poetry есть кое что для тебя.
-```
-➜ poetry version patch   
+```console
+$ poetry version patch   
 Bumping version from 0.1.0 to 0.1.1
-
-➜ poetry version preminor
+$ poetry version preminor
 Bumping version from 0.1.1 to 0.2.0-alpha.0
-
-➜ poetry version minor   
+$ poetry version minor   
 Bumping version from 0.2.0-alpha.0 to 0.2.0
-
-➜ poetry version premajor
+$ poetry version premajor
 Bumping version from 0.2.0 to 1.0.0-alpha.0
-
-➜ poetry version major   
+$ poetry version major   
 Bumping version from 1.0.0-alpha.0 to 1.0.0
 ```
 
@@ -118,13 +134,13 @@ build-backend = "poetry.core.masonry.api"
 ```
 
 Для того чтобы устновить все зависимости требуется просто ввести
-```
-poetry install
+```console
+$ poetry install
 ```
 
 Данная команда создаст виртуальную среду сама и установит **все** зависимости. Включая dev-зависимости. Чтобы установить зависимости только для приложения можно добавить `--no-dev` ключ. 
 
-## Как паковать и публиковать на pypi
+## Packaging and publishing on pypi
 Теперь я вас удивлю. Всё что сейчас делалось, по большей чати нужно было для легкой упаковки. Сейчас поясню.
 
 Давайте добавим какую-нибудь функцию в проект.
@@ -146,8 +162,8 @@ __all__ = [
 
 Теперь соберем проект.
 
-```bash
-➜ poetry build
+```console
+$ poetry build
 Building new_proj (0.1.0)
   - Building sdist
   - Built new_proj-0.1.0.tar.gz
@@ -159,44 +175,45 @@ Building new_proj (0.1.0)
 
 Давайте проверим, что всё работает корректно.
 
-```bash
-➜ pip install "./dist/new_proj-0.1.0-py3-none-any.whl"  
+```console
+$ pip install "./dist/new_proj-0.1.0-py3-none-any.whl"  
 Processing ./dist/new_proj-0.1.0-py3-none-any.whl
 Installing collected packages: new-proj
 Successfully installed new-proj-0.1.0
 
-➜  python
+$ python
 Python 3.9.1 (default, Feb  1 2021, 04:02:33) 
 [GCC 10.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>> from new_proj import ab_problem
->>> ab_problem(1,33)
+$ from new_proj import ab_problem
+$ ab_problem(1,33)
 34
 ```
 
 Как можно видеть всё работает корректно и теперь мы можем использовать наш пакет.
 
 Для публикации следует использовать:
-```bash
-poetry publish -u "user" -p "password"
+```console
+$ poetry publish -u "user" -p "password"
 ```
 
 Подробнее можно почитать [тут](https://python-poetry.org/docs/cli/#publish).
 
-# Конфигурация проекта
+# Configuring project
 Конечно, такого рода конфигурация проекта всё равно никуда не годиться.
 Давайте настроим автоматический линтинг.
 
-```bash
-poetry add \
-	flake8 \
-	black \
-	isort \
-	mypy \
-	pre-commit \
-	yesqa \
-	autoflake \
-	wemake-python-styleguide --dev
+```console
+$ poetry add \
+$	flake8 \
+$	black \
+$	isort \
+$	mypy \
+$	pre-commit \
+$	yesqa \
+$	autoflake \
+$	wemake-python-styleguide --dev
+---> 100%
 ```
 
 Теперь добавим конфигурационных файлов в корень проекта.
@@ -385,16 +402,13 @@ repos:
 ОН НЕОБХОДИМ ЧТОБЫ pre-commit РАБОТЛ МАКСИМАЛЬНО КОРРЕКТНО.
 
 Теперь установим хуки в репозиторий.
-```bash
-➜ git init
+```console
+$ git init
 Initialized empty Git repository in .git/
-
-➜ poetry shell
-
-➜ pre-commit install
+$ poetry shell
+$ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
-
-➜ git commit
+$ git commit
 ... # Упадет с кучей ошибок
 ```
 
@@ -448,23 +462,23 @@ def ab_problem(first: int, second: int) -> int:
 
 Теперь вы можете сделать свой первый коммит.
 
-```bash
-(new-proj-I04oatEq-py3.9) ➜ git commit     
-Check python ast.........................................................Passed
-Trim Trailing Whitespace.................................................Passed
-Check Toml...............................................................Passed
-Fix End of Files.........................................................Passed
-Add trailing commas......................................................Passed
-Format with Black........................................................Passed
-autoflake................................................................Passed
-isort....................................................................Passed
-Check with Flake8........................................................Passed
-Validate types with MyPy.................................................Passed
-Remove usless noqa.......................................................Passed
-pytest...................................................................Passed
+```console
+$ git commit     
+Check python ast................Passed
+Trim Trailing Whitespace........Passed
+Check Toml......................Passed
+Fix End of Files................Passed
+Add trailing commas.............Passed
+Format with Black...............Passed
+autoflake.......................Passed
+isort...........................Passed
+Check with Flake8...............Passed
+Validate types with MyPy........Passed
+Remove usless noqa..............Passed
+pytest..........................Passed
 ```
 
-# Создание CLI-приложения
+# Creating CLI tool
 А что если я хочу cli-приложение?
 Ты не представляешь насколько это просто.
 
@@ -518,30 +532,26 @@ ab_solver = "new_proj.main:main"
 
 Теперь нам доступна программа `ab_solver` внутри shell.
 
-```bash
-➜ poetry install
-
-➜ poetry shell      
-
-(new-proj-I04oatEq-py3.9) ➜ ab_solver 1 2
+```console
+$ poetry install
+$ poetry shell
+$ ab_solver 1 2
 3
 ```
 
 Хочешь установить? Пожалуйста.
-```bash
-➜ poetry build
+```console
+$ poetry build
 Building new_proj (0.1.0)
   - Building sdist
   - Built new_proj-0.1.0.tar.gz
   - Building wheel
   - Built new_proj-0.1.0-py3-none-any.whl
-
-➜ pip install "./dist/new_proj-0.1.0-py3-none-any.whl"
+$ pip install "./dist/new_proj-0.1.0-py3-none-any.whl"
 Processing ./dist/new_proj-0.1.0-py3-none-any.whl
 Installing collected packages: new-proj
 Successfully installed new-proj-0.1.0
-
-➜ ab_solver 1 2                                     
+$ ab_solver 1 2                                     
 3
 ```
 
