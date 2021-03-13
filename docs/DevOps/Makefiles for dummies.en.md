@@ -8,11 +8,11 @@ It works pretty simple.
 
 Here's an example of a `Makefile`:
 ```Makefile
-# Сгенерируем простой файл
+# Generate bash file.
 test.gen:
 	@echo 'echo "Hi!"' > "test.gen"
 
-# Команда для запуска файла test.gen
+# Run generated file test.gen
 .PHONY: run
 run: test.gen
 	sh "test.gen"
@@ -35,11 +35,9 @@ Let's dive into it.
 ## Targets dependencies
 
 On the line where we define our `run` target, we can see the `test.gen`
-target places right after the colon.
+target places right after the colon. This is a dependency of the `run` target, it fires right before executing the `run` target. Each target can have multiple dependencies, they are spearated with space.
 
-Это зависимость данного таргета и она будет вызвана до того, как выполнится скрипт описываемого таргета. Таких зависимостей может быть много, перечисляются они чере пробел.
-
-Например:
+E.G.:
 ```Makefile
 .PHONY: target1
 target1:
@@ -54,7 +52,7 @@ target3: target1 target2
 	echo "memes"
 ```
 
-При вызове `make target3` будет выведено:
+Let's call the `target3` target and see the output.
 ```console
 $ make target3
 echo "1"  
@@ -65,12 +63,13 @@ echo "memes"
 memes
 ```
 
-Как можно видеть, он построил граф зависимостей и не выполнил `target1` дважды.
+As you can see, Makefile has built the target dependency tree and didn't call the `target1` second time. 
 
 ## Hiding commands output
 
-В предыдущем примере можно заметить, что он написал все команды в терминал. Для того, чтобы этого избежать следует добавить "@" в начало команды и она не будет напечатана.
+In previous example you can notice that make command printed out all shell commands for every target. You can hide the commands from the output by adding "@" at the start of a command.
 
+Like this:
 ```Makefile
 .PHONY: target1
 target1:
@@ -85,7 +84,7 @@ target3: target1 target2
 	@echo "memes"
 ```
 
-Теперь при вызое `make target3` будет показано следующее:
+Now you can call targets and it won't print the actual commands. Like this:
 ```console
 $ make target3
 1
@@ -95,38 +94,58 @@ memes
 
 
 ## Generated files validation
-Зачастую `Makefile` используют для компиляции С и зачастую требуется
-собрать какую-либо часть проект и пропустить сборку этой части, если эта часть уже собрана.
-Раскрою секрет, в Makefile это базовый функционал.
+Make files are often used for compiling C programs and sometimes you need to compile a part of a project and skip building this part if executable is already present. It's a basic functionality of Makefiles.
 
-Давайте немного поменяем первый Makefile и запустим дважды.
+Let's change the first `Makefile` and call the `run` target twice.
 ```Makefile
-# Сгенерируем простой файл
+# Generate bash file.
 test.gen:
 	echo 'echo "Hi!"' > "test.gen"
 
-# Команда для запуска файла test.gen
+# Run generated file test.gen
 .PHONY: run
 run: test.gen
 	sh "test.gen"
 ```
 
-Теперь вызываемая команда таргета `test.gen` выводится на экран.
+Now we can see which commands Makefile executes.
 
-Позапускаем.
-
+Let's run it.
 ```console
 $ make run  
-echo 'echo "Hi!"' > "test.gen"  # Наша командабыла вызвана.
+echo 'echo "Hi!"' > "test.gen"
 sh "test.gen"  
 Hi!  
 $ make run  
-sh "test.gen"  # Наша команда не вызвана.
+sh "test.gen"
 Hi!
 ```
 
-Дело в том, что названия таргетов - названия файлов, которые должны сгенерировать эти самые таргеты.
-То есть, в данном случае таргет `test.gen` должен сгенерировать файл `test.gen` по окончании выполнения. Если этот файл уже присутствует, то команда выполнена не будет. Именно поэтому у нас она не запустилась второй раз, так как в первый запуск был создан треубемый файл и его никто не удалял между запусками.
+As you can see, second time it has skipped the run of a `test.gen` target.
+It's because name of a target is a filename and it will never execute the target if file with name equals to target name exists. That is, in that particular case the `test.gen` target have to generate the `test.gen` file during the execution, and if it's already present it doesn't update it. That's why it didn't run it for the second time.  
 
-А что если я вот не хочу чтобы команда создавала и проверяла файлы?
-Для этого пишут `.PHONY: ${target}`. Например у нас так объявлен таргет `run` и, даже если файл с названием `run` будет присутствовать в директории цель не будет выполняться.
+If you don't want to have that feature you can disable it by adding `.PHONY: ${target}` somewhere.
+Like this:
+```Makefile
+.PHONY: test.gen
+# Generate bash file
+test.gen:
+    echo 'echo "Hi!"' > "test.gen"
+
+# Run generated file test.gen
+.PHONY: run
+run: test.gen
+    sh "test.gen"
+```
+
+Now it executes `test.gen` every time it's called.
+```console
+$ make run
+echo 'echo "Hi!"' > "test.gen"
+sh "test.gen"
+Hi!
+$ make run
+echo 'echo "Hi!"' > "test.gen"
+sh "test.gen"
+Hi!
+```
