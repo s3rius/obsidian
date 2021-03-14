@@ -1,10 +1,12 @@
-# Добро пожаловать
-Приветствую в моей книге для заметок.
+# Welcome
 
-Здесь вы можете найти полезную информацию о технологиях.
+Greetings and welcome to my note book.
+
+Here you can find useful information about tech.
+
 
 <div align="left"> 
-  <h3>Мои контакты</h3>
+  <h3>Contact me</h3>
 </div>
 <div align="left">
 <a href="https://t.me/s3rius_san">

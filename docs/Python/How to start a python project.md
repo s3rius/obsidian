@@ -1,20 +1,19 @@
-# Как стартовать проект
+# How to start a project
+You have several options. For example you can store a bunch of `.py` files in repo on github and be fully satisfied, or you can add the `setup.py` script and publish it on pypi, but the best option as I can see is to start and develop your project with poetry.
 
-В целом, вариантов несколько. Например, можно просто хранить несколько скриптов на github и быть довольным, можно дописать к ним `setup.py` и выложиться на pypi. Но лучший способ - структурированный проект с `poetry`.
+Why?
 
-Почему?
+`Poetry` has many features. I'm here to tell you about them, and how to use it and what to do.
 
-Особенностей у poetry много. Сейчас расскажу про то, как использовать и что делать.
 
-Для начала создадим проект.
-
+Let's create a project with poetry.
 ```console
 $ poetry new new_proj
 Created package new_proj in new_proj
 $ cd new_proj
 ```
 
-Данная команда сгенерирует следующую структуру:
+This command generates project with the following structure:
 ```
 new_proj
 ├── new_proj
@@ -26,38 +25,62 @@ new_proj
     └── test_new_proj.py
 ```
 
-Это наш новый проект с небольшими заготовками. В целом, тут нет ничего необычного. Весь код библиотеки/проекта будет в папке с названием проекта. `README.rst` - дефолтный README. `pyproject.toml` - данные о проекте для упаковщика.
+It's our brand new project with several stubs. There is nothing unusual. All the code you want to write will be placed in a directory with the same name as the project. `README.rst` is the default README. `pyproject.toml` contains meta-data about project, such as dependencies, description, extra installation options and more. You can read about `pyproject.toml` [here](https://python-poetry.org/docs/pyproject/).
 
-## Что делать с poetry
+## How to deal with poetry
 
-Вся информация есть в оф. документации тулы. Тут я расскажу про основные моменты.
+All the information you need you can find in official documentation poetry. I'll tell you about basic stuff here.
 
-### установка зависимостей
+### Dependency management
 
-Чтобы добавить зависимость проекта достаточно выполнить
-```bash
-poetry add ${dependency}
+To add a dependency to your project you can simply run this:
+```console
+$ poetry add ${dependency}
 ```
 
-Данная команда найдет последнюю нужную версию и запишет её в pyproject.toml и в poetry.lock.
+This command finds the last convinient version of the dependency and writes it to the `pyproject.toml` and `poetry.lock`.
 
-Для того, чтобы установить зависимость для разработки (линтеры например), достаточно добавить флаг `--dev`.
+To add dependency only for development, such as linters or formatters,
+you can add the `--dev` flag.
 
-```bash
-poetry add ${dependency} --dev 
+```console
+$ poetry add ${dependency} --dev 
 ```
 
-### Выполнение команд
+To remove dependency you simply need to replace `add` with `remove`.
 
-При использовании virtualenv для входа в оболочку всегда надо было вводить
+Working example:
+```console
+$ poetry add loguru   
+Using version ^0.5.3 for loguru  
+
+Updating dependencies  
+Resolving dependencies... (0.1s)  
+
+Writing lock file
+  
+Package operations: 1 install, 0 updates, 0 removals  
+ • Installing loguru (0.5.3)
+$ poetry remove loguru
+Updating dependencies
+Resolving dependencies... (0.1s)
+
+Writing lock file
+
+Package operations: 0 installs, 0 updates, 1 removal  
+ • Removing loguru (0.5.3)
+```
+
+### Running commands
+
+With virtual environment you need to write something like this, to enter the shell:
 ```bash
 source venv/bin/activate
 ```
 
-Однако с poetry это излишне. Он сам создает и менеджит виртуальные среды.
-Чтобы выполнить одиночную команду можно вызвать `run`. 
+But with poetry it's much easier. It creates and manages virtual envs on it's own. To run a single command you can call `run`. 
 
-Например:
+E.G.:
 ```console
 $ poetry install black --dev
 Using version ^20.8b1 for black   
@@ -77,7 +100,7 @@ All done! ✨ 🍰 ✨
 2 files reformatted, 1 file left unchanged.
 ```
 
-Для выполнения нескольких комманд подряд, можно войти в shell. Это аналог `source venv/bin/activate`.
+For executing multiple commands within the shell you can enter interactive shell session with `poetry shell`. It's similar to virtualenv's `source venv/bin/activate`.
 
 ```console
 $ poetry shell
@@ -89,13 +112,13 @@ All done! ✨ 🍰 ✨
 2 files reformatted, 1 file left unchanged.
 ```
 
-### Версионирование
+### Versioning
 
-Менять версии пакета вручную больше не нужно.
+With poetry you don't need to change package versions manually.
 
-У poetry есть кое что для тебя.
+The Poetry has something for you.
 ```console
-$ poetry version patch   
+$ poetry version patch
 Bumping version from 0.1.0 to 0.1.1
 $ poetry version preminor
 Bumping version from 0.1.1 to 0.2.0-alpha.0
@@ -109,9 +132,9 @@ Bumping version from 1.0.0-alpha.0 to 1.0.0
 
 ## pyproject.toml
 
-Данный файл содержит в себе все нужные зависимости для проекта и всяческую мета-информацию.
+As mentioned before this file contains package's meta-information.
 
-Пример pyproject.tom
+Example of `pyproject.toml`
 ```toml
 [tool.poetry]
 name = "new_proj"
@@ -133,17 +156,16 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 ```
 
-Для того чтобы устновить все зависимости требуется просто ввести
+To install all dependencies simply run:
 ```console
 $ poetry install
 ```
 
-Данная команда создаст виртуальную среду сама и установит **все** зависимости. Включая dev-зависимости. Чтобы установить зависимости только для приложения можно добавить `--no-dev` ключ. 
+This command creates virtual environment and installs dependencies from the `pyproject.toml` file. If you want install dependencies only for runtime you can add `--no-dev`.
+## Packaging and publishing on pypi
+It's really simple. 
 
-## Как паковать и публиковать на pypi
-Теперь я вас удивлю. Всё что сейчас делалось, по большей чати нужно было для легкой упаковки. Сейчас поясню.
-
-Давайте добавим какую-нибудь функцию в проект.
+Let's add a function in the project.
 
 ```python
 # new_proj/main.py
@@ -160,7 +182,7 @@ __all__ = [
 ]
 ```
 
-Теперь соберем проект.
+Now you can build the project.
 
 ```console
 $ poetry build
@@ -171,9 +193,8 @@ Building new_proj (0.1.0)
   - Built new_proj-0.1.0-py3-none-any.whl
 ```
 
-Та-да. Это готовый к публикации на pypi пакет. Лежит он в папке dist.
-
-Давайте проверим, что всё работает корректно.
+You can find ready for publication package in `dist/` folder.
+Let's check if everything works.
 
 ```console
 $ pip install "./dist/new_proj-0.1.0-py3-none-any.whl"  
@@ -190,18 +211,17 @@ $ ab_problem(1,33)
 34
 ```
 
-Как можно видеть всё работает корректно и теперь мы можем использовать наш пакет.
+It works! Now we can use it.
 
-Для публикации следует использовать:
+If you want to publish the package you can run:
 ```console
 $ poetry publish -u "user" -p "password"
 ```
 
-Подробнее можно почитать [тут](https://python-poetry.org/docs/cli/#publish).
+More information you can find [here](https://python-poetry.org/docs/cli/#publish).
 
-# Конфигурация проекта
-Конечно, такого рода конфигурация проекта всё равно никуда не годиться.
-Давайте настроим автоматический линтинг.
+# Configuring project
+Project without configuration is a bad thing. Let's configure development environment.
 
 ```console
 $ poetry add \
@@ -216,9 +236,10 @@ $	wemake-python-styleguide --dev
 ---> 100%
 ```
 
-Теперь добавим конфигурационных файлов в корень проекта.
+Now we need to add configuration files for linters and formatters.
+This is my preffered configurations, you can change it as you wish.
 
-`.mypy.ini` для настройки валидации типов.
+`.mypy.ini` for types validation.
 ```ini
 [mypy]
 strict = True
@@ -231,7 +252,7 @@ implicit_reexport=True
 allow_untyped_decorators=True
 ```
 
-`.isort.cfg` для конфигурации сортировки импортов.
+`.isort.cfg` for import sorting.
 ```ini
 [isort]
 multi_line_output = 3
@@ -239,7 +260,7 @@ include_trailing_comma = true
 use_parentheses = true
 ```
 
-`.flake8` - конфигурация линтинга. Тут довольно много. Это игнорирование ненужных кодов ошибок, которые не особо-то и ошибки.
+`.flake8` - Linter configuration. Biggest part of the document is ignore statements for errors that's not really an errors.
 ```ini
 [flake8]
 max-complexity = 6
@@ -330,7 +351,7 @@ exclude =
   ./var,
 ```
 
-`.pre-commit-config.yaml` - конфигураци хуков для запуска всех линтеров перед коммитом.
+`.pre-commit-config.yaml` - Git hooks configuration. To perform all checks right before `git commit`.
 ```yaml
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -397,11 +418,11 @@ repos:
         types: [ python ]
 ```
 
-И не забываем про `.gitignore`. Его можно найти [тут](https://github.com/github/gitignore/blob/master/Python.gitignore).
+Don't forget to add `.gitignore`. You can find it [here](https://github.com/github/gitignore/blob/master/Python.gitignore).
 
-ОН НЕОБХОДИМ ЧТОБЫ pre-commit РАБОТЛ МАКСИМАЛЬНО КОРРЕКТНО.
+It' REALLY IMPORTANT for correct work of pre-commit.
 
-Теперь установим хуки в репозиторий.
+Now we can install hooks.
 ```console
 $ git init
 Initialized empty Git repository in .git/
@@ -409,14 +430,14 @@ $ poetry shell
 $ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
 $ git commit
-... # Упадет с кучей ошибок
+... # It will have a lot of errors.
 ```
 
-Теперь поправим все возникшие проблемы.
+Let's fix it.
 
-Во первых исправим тесты.
+At first we need to fix tests.
 
-В `tests/test_new_proj.py` напишем следующее:
+In `tests/test_new_proj.py` add this:
 ```python
 from new_proj import ab_problem
 
@@ -426,7 +447,7 @@ def test_ab() -> None:
     assert ab_problem(1, 2) == 3
 ```
 
-Добавим описания в `__init__` файлы.
+Add a description in `__init__` files.
 
 `tests/__init__.py`:
 ```python
@@ -443,7 +464,7 @@ __all__ = [
 ]
 ```
 
-Пофиксим основной файл проекта.
+Fix the main file of a project.
 
 `new_proj/main.py`:
 ```python
@@ -460,7 +481,7 @@ def ab_problem(first: int, second: int) -> int:
     return first + second
 ```
 
-Теперь вы можете сделать свой первый коммит.
+Now you can commit without errors.
 
 ```console
 $ git commit     
@@ -478,12 +499,12 @@ Remove usless noqa..............Passed
 pytest..........................Passed
 ```
 
-# Создание CLI-приложения
-А что если я хочу cli-приложение?
-Ты не представляешь насколько это просто.
+Now you know how to create a masterpiece.
+# Creating CLI tool
+What if I want to create a CLI-tool?
+It easier than you think.
 
-Пойдем модифицируем наш основной файл.
-
+Let's modify our main file.
 ```python
 import argparse
 
@@ -522,16 +543,14 @@ def main() -> None:
 
 ```
 
-Теперь поправим pyproject.toml таким образом чтобы он создал cli для нашей функции.
+Now we need to change the `pyproject.toml`. Add the following section somewhere in `pyproject.toml`.
 
-Добавим следующую секцию куда-нибудь в `pyproject.toml`:
 ```toml
 [tool.poetry.scripts]
 ab_solver = "new_proj.main:main"
 ```
 
-Теперь нам доступна программа `ab_solver` внутри shell.
-
+Now you can use the `ab_solver` in your terminal.
 ```console
 $ poetry install
 $ poetry shell
@@ -539,7 +558,7 @@ $ ab_solver 1 2
 3
 ```
 
-Хочешь установить? Пожалуйста.
+Do you want to install it globally in the system? Here you go.
 ```console
 $ poetry build
 Building new_proj (0.1.0)
@@ -555,4 +574,4 @@ $ ab_solver 1 2
 3
 ```
 
-Если запаблишить проект, то у пользователя тоже установится ваша cli-программа.
+If you publish your project in `pypi` or anywhere else. Users who install your program will get it as the cli-tool.

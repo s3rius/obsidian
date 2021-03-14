@@ -1,3 +1,3 @@
-# Заметки по Девопсу
-Какждый раз, когда я стартую проект, я думаю о  том, как он будет размещен и где мне его развернуть.
-В данных статьях я собираю всё то, что может помочь вам в настройке окружения или развертывании проекта, будь то чистое серверное железо или облачное решение.
+# DevOps notes
+Every time I start new project, I think about where it can be deployed and how can I deploy it.
+In this articles I gather things to help you in setting up your dev environment and deploy on bare metal servers or with a cloud solution.

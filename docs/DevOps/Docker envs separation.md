@@ -1,14 +1,13 @@
-# Разделение докера на среды
+# Separating docker envs
 
-Должен ли ты разделять среды докера в несколько `docker-compose` файлов?
-Определенно! В некоторых случаях невозможно разобраться что разработчики хотели сделать или почему ничего не работает. Настройка раздельных сред может стать настоязей мешанино. В этой статье я покажу как настроить `docker-compose` и избежать миллиона проблем.
+Should we separate docker environments in several `docker-compose` files in your projects? Definitely! In some cases you can't figure out what developers wanted to do or why project doesn't work. Setting up separation between dev and prod environments can become a mishmash. In this article I'll show you the easiest way for setting up `docker-compose` for your project and how to avoid millon problems.
 
-Как мы вообще можем разделить среды для локальной разработки и продовые?
-Отет прост: Требуется декомпозировать проект и создать отдельные файлы под каждую из сред или даже сервисов.
+How can we separate environments for local development and production?
+The answer is simple. We need to decompose our project and create separate files for environments or even a services.
 
-Это нормально, если у тебя будет больше 2-ч `docker-compose` файлов. 
+It's totally ok if you have more than 2 `docker-compose` files.
 
-Например:
+For example:
 ```
 deploy  
 ├── docker-compose.autotests.yml
@@ -24,10 +23,10 @@ deploy
    └── start-migrations.sh
 ```
 
-### Как это работает?
-Докер умеет работать с множеством `docker-compose` файлов одновременно.И мы можем использовать это для разделения сред.
+### How does it work?
 
-Выглядит это следующим образом.
+Docker can work with multiple `docker-compose` files simultaneously. And we can use it for environment separation. It looks like this:
+
 ```bash
 docker-compose \
 	-f "deploy/docker-compose.yml" \
@@ -36,13 +35,13 @@ docker-compose \
 	up
 ```
 
-В каждом из этих файлов определен какой-то кусок конфигурации, который не пересекается. Например в `docker-compose.yml` определено приложение и некоторые необходимые сервисы, а в остальных файлах добавляются сервисы или меняются значения предыдущих.
+In each `docker-compose` file we define a part of the configuration, which doesn't inersect with others. For example: `docker-compose.yml` defines our application and some required services. In other compose files we define services or override existing configurations defined in previous files.
 
-Наверное, тут проще на примере пояснить.
+I guess, it simpler to show it by example.
 
-Допустим у нас есть проект, у которого поднимается бекенд с параметрами, которые отличаются на проде и локально.
+Let's imagine, that you have a project that can be started with different parameters, and they are different for local and production.
 
-Для простоты создадим простецикий проект со следующей структурой.
+Let's create simple project with the following stucture:
 
 ```
 proj
@@ -53,7 +52,7 @@ proj
 └── script.py
 ```
 
-Для начала напишем скрипт, который будет в центре всего.
+Let's write a simple python script.
 ```python
 # script.py
 from sys import argv # это аргуметы переданные в скрипт
@@ -65,9 +64,7 @@ if __name__ == "__main__":
 	main()
 ```
 
-
-После того, как скрипт готов и отлажен давайте завернем его в докер,
-создав `Dockerfile` в `deploy/dockerfiles/script.Dockerfile`.
+After that we need to wrap it into docker container by creating `Dockerfile` in `deploy/dockerfiles/script.Dockerfile`
 
 ```dockerfile
 from python:3.8 # asd
@@ -77,7 +74,7 @@ COPY script.py /app/script.py
 CMD python /app/script.py
 ```
 
-Как вы видите, Dockerfile очень прост. Теперь добавим главный `docker-compose.yml`.
+As you can see, Dockerifle is very simple. Now let's create the main `docker-compose.yml`.
 
 ```yaml
 ---
@@ -86,14 +83,14 @@ version: '3.7'
   
 services:  
   script:  
-        build:  # Собираем приложение используя наш dockerfile.
+        build:  # build applicationo.
             dockerfile: ./deploy/dockerfiles/script.Dockerfile  
             context: .  
         # Запускаем его с командой для продового запуска.
         command: python script.py this is prod
 ```
 
-Теперь запустим всё это чудо.
+Now we can start this project with that command:
 
 ```bash
 d-test docker-compose \
@@ -102,15 +99,15 @@ d-test docker-compose \
         run --rm script
 ```
 
-Вот что будет выведено на экран.
+It will print:
 ```log
 Creating d-test_script_run ... done
 this; is; prod
 ```
 
-Как мы видим, на экран вывелось сообщение, которое мы указали в нашем `docker-compose.yml`
+As we can see it has printed a message we've passed in our `docker-compose.yml`.
 
-А теперь для локальной разработки мы не будем ничего менять в нашем файле композиции, а создадим новый рядом.
+Now we are going to configure environment for local development without changing the main `docker-compose.yml`. Let's create the `docker-compose.dev.yml`
 
 ```yaml
 ---
@@ -122,7 +119,7 @@ services:
     command: python script.py this is dev
 ```
 
-Теперь добавим ещё один файл в нашу команду запуска.
+Now add this file in our startup script and run it.
 
 ```bash
 d-test docker-compose \
@@ -132,17 +129,17 @@ d-test docker-compose \
         run --rm script
 ```
 
-Вот что будет выведено на экран:
+It'll print the following:
 ```log
 Creating d-test\_script\_run ... done  
 this; is; dev
 ```
 
-Как можно заметить, конфигурация запуска перезаписалась в порядке вызова.
+As you can see, deploy configuration was overwritten with our new file.
 
-То есть, каждый последующий файл композиции может добавлять сервисы и **частично** изменять конфигурацию предыдущих.
+Any mentioned file in this command can add new services or *partially* override previously mentioned files.
 
-Итоговая структура проекта:
+Complete project structure:
 ```
 proj
 ├── deploy  
@@ -153,5 +150,5 @@ proj
 └── script.py
 ```
 
-### Где это применимо?
-Ну, в любом проекте, сложнее того, который мы рассмотрели. Потому что в реальной жизни не всё так радужно и локальная версия приложения может отличаться не только параметрами запуска, но и целыми сервисами, которые требуются для локальной копии приложения.
+### Where can I use that?
+In every project bigger than this one. Because the real life not so friendly and local environment of the project can be different to the production not only by configuration, but the whole services.

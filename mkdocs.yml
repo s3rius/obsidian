@@ -1,3 +1,5 @@
+---
+
 site_name: S3rius' Dev Notes
 repo_name: s3rius/obsidian
 repo_url: https://github.com/s3rius/obsidian
@@ -28,21 +30,21 @@ markdown_extensions:
 plugins:
   - search
   - termynal
-  - translations: # https://github.com/s3rius/mkdocs-translations
-      default_language: ru
+  - translations:  # https://github.com/s3rius/mkdocs-translations
+      default_language: en
       languages:
         en: english
         ru: русский
 
 extra:
-    alternate:
-    - name: 🇷🇺 Русский
-      link: /ru/
-      lang: ru
-
+  alternate:
     - name: 🇬🇧 English
       link: /en/
       lang: en
+
+    - name: 🇷🇺 Русский
+      link: /ru/
+      lang: ru
 
 extra_css:
   - css/highlight_style.css
