@@ -1,9 +1,9 @@
 # How to start a project
-You have several options. For example you can store a bunch of `.py` files in repo on github and be fully satisfied, or you can add the `setup.py` script and publish it on pypi, but the best option as I can see is to start and develop your project with poetry.
+You have several options. For example, you can store a bunch of `.py` files in a repo on the Github and be fully satisfied, or you can add the `setup.py` script and publish it on the PyPI, but the best option as I can see is to start and develop your project with poetry.
 
 Why?
 
-`Poetry` has many features. I'm here to tell you about them, and how to use it and what to do.
+`Poetry` has many features. I'm here to tell you about them, and how to use them, and what to do.
 
 
 Let's create a project with poetry.
@@ -13,7 +13,7 @@ Created package new_proj in new_proj
 $ cd new_proj
 ```
 
-This command generates project with the following structure:
+This command generates a project with the following structure:
 ```
 new_proj
 ├── new_proj
@@ -25,7 +25,7 @@ new_proj
     └── test_new_proj.py
 ```
 
-It's our brand new project with several stubs. There is nothing unusual. All the code you want to write will be placed in a directory with the same name as the project. `README.rst` is the default README. `pyproject.toml` contains meta-data about project, such as dependencies, description, extra installation options and more. You can read about `pyproject.toml` [here](https://python-poetry.org/docs/pyproject/).
+It's our brand new project with several stubs. There is nothing unusual. All the code you want to write will be placed in a directory with the same name as the project. `README.rst` is the default README. `pyproject.toml` contains meta-data about the project, such as dependencies, description, extra installation options, and more. You can read about `pyproject.toml` [here](https://python-poetry.org/docs/pyproject/).
 
 ## How to deal with poetry
 
@@ -38,7 +38,7 @@ To add a dependency to your project you can simply run this:
 $ poetry add ${dependency}
 ```
 
-This command finds the last convinient version of the dependency and writes it to the `pyproject.toml` and `poetry.lock`.
+This command finds the last convenient version of the dependency and writes it to the `pyproject.toml` and `poetry.lock`.
 
 To add dependency only for development, such as linters or formatters,
 you can add the `--dev` flag.
@@ -73,12 +73,12 @@ Package operations: 0 installs, 0 updates, 1 removal
 
 ### Running commands
 
-With virtual environment you need to write something like this, to enter the shell:
+In a virtual environment you need to write something like this, to enter the shell:
 ```bash
 source venv/bin/activate
 ```
 
-But with poetry it's much easier. It creates and manages virtual envs on it's own. To run a single command you can call `run`. 
+But with poetry, it's much easier. It creates and manages virtual environments on its own. To run a single command you can call `run`. 
 
 E.G.:
 ```console
@@ -100,7 +100,7 @@ All done! ✨ 🍰 ✨
 2 files reformatted, 1 file left unchanged.
 ```
 
-For executing multiple commands within the shell you can enter interactive shell session with `poetry shell`. It's similar to virtualenv's `source venv/bin/activate`.
+For executing multiple commands within the shell you can enter an interactive shell session with `poetry shell`. It's similar to virtualenv's `source venv/bin/activate`.
 
 ```console
 $ poetry shell
@@ -114,7 +114,7 @@ All done! ✨ 🍰 ✨
 
 ### Versioning
 
-With poetry you don't need to change package versions manually.
+With poetry, you don't need to change package versions manually.
 
 The Poetry has something for you.
 ```console
@@ -132,7 +132,7 @@ Bumping version from 1.0.0-alpha.0 to 1.0.0
 
 ## pyproject.toml
 
-As mentioned before this file contains package's meta-information.
+As mentioned before this file contains the package's meta-information.
 
 Example of `pyproject.toml`
 ```toml
@@ -161,12 +161,11 @@ To install all dependencies simply run:
 $ poetry install
 ```
 
-This command creates virtual environment and installs dependencies from the `pyproject.toml` file. If you want install dependencies only for runtime you can add `--no-dev`.
+This command creates a virtual environment and installs dependencies from the `pyproject.toml` file. If you want to install dependencies only for the runtime you can add `--no-dev`.
 ## Packaging and publishing on pypi
 It's really simple. 
 
-Let's add a function in the project.
-
+Let's add a function to the project.
 ```python
 # new_proj/main.py
 def ab_problem(a: int, b: int) -> int:
@@ -183,7 +182,6 @@ __all__ = [
 ```
 
 Now you can build the project.
-
 ```console
 $ poetry build
 Building new_proj (0.1.0)
@@ -221,8 +219,7 @@ $ poetry publish -u "user" -p "password"
 More information you can find [here](https://python-poetry.org/docs/cli/#publish).
 
 # Configuring project
-Project without configuration is a bad thing. Let's configure development environment.
-
+A project without configuration is a bad thing. Let's configure the development environment.
 ```console
 $ poetry add \
 $	flake8 \
@@ -237,7 +234,7 @@ $	wemake-python-styleguide --dev
 ```
 
 Now we need to add configuration files for linters and formatters.
-This is my preffered configurations, you can change it as you wish.
+This is my preferred configuration, you can change it as you wish.
 
 `.mypy.ini` for types validation.
 ```ini
@@ -260,7 +257,7 @@ include_trailing_comma = true
 use_parentheses = true
 ```
 
-`.flake8` - Linter configuration. Biggest part of the document is ignore statements for errors that's not really an errors.
+`.flake8` - Linter configuration. The biggest part of the document is ignore statements for errors that are not errors.
 ```ini
 [flake8]
 max-complexity = 6
@@ -420,7 +417,7 @@ repos:
 
 Don't forget to add `.gitignore`. You can find it [here](https://github.com/github/gitignore/blob/master/Python.gitignore).
 
-It' REALLY IMPORTANT for correct work of pre-commit.
+It' VERY IMPORTANT for correct work of pre-commit.
 
 Now we can install hooks.
 ```console
@@ -448,7 +445,6 @@ def test_ab() -> None:
 ```
 
 Add a description in `__init__` files.
-
 `tests/__init__.py`:
 ```python
 """Tests for new_proj."""
@@ -502,7 +498,7 @@ pytest..........................Passed
 Now you know how to create a masterpiece.
 # Creating CLI tool
 What if I want to create a CLI-tool?
-It easier than you think.
+It is easier than you think.
 
 Let's modify our main file.
 ```python
@@ -574,4 +570,4 @@ $ ab_solver 1 2
 3
 ```
 
-If you publish your project in `pypi` or anywhere else. Users who install your program will get it as the cli-tool.
+If you publish your project in `PyPi` or anywhere else, users who install your program get it as the CLI-tool.
