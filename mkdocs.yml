@@ -14,6 +14,7 @@ theme:
     - navigation.tabs
 
 markdown_extensions:
+  - attr_list
   - fenced_code
   - codehilite:
       use_pygments: false
